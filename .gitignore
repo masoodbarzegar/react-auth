@@ -1,4 +1,4 @@
-db_data
+db_data/*
 
 frontend/node_modules
 frontend/npm-debug.log
