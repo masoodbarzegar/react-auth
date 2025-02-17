@@ -12,6 +12,10 @@ services:
       - /app/node_modules
     networks:
       - mynetwork
+    stdin_open: true
+    tty: true
+    environment:
+      - WATCHPACK_POLLING=true 
 
   backend:
     build:
