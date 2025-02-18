@@ -1,5 +1,9 @@
 db_data/*
 
+# Ignore .env files in both frontend and backend
+.env
+frontend/.env
+backend/.env
 frontend/node_modules
 frontend/npm-debug.log
 frontend/build

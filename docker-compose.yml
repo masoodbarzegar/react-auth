@@ -30,32 +30,30 @@ services:
       - mynetwork
     depends_on:
       - db
+    env_file:
+      - ./backend/.env
 
   db:
     image: mysql:8.0
     container_name: mysql_db
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
     volumes:
       - ./db_data:/var/lib/mysql
       - ./db_init:/docker-entrypoint-initdb.d
     networks:
       - mynetwork
+    env_file:
+      - ./backend/.env
 
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: phpmyadmin
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: rootpassword
     ports:
       - "8081:80"
     networks:
       - mynetwork
+    env_file:
+      - ./backend/.env
 
 networks:
   mynetwork:
