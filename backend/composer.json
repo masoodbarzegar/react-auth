@@ -1,0 +1,26 @@
+{
+  "name": "masoud/react-login",
+  "description": "This project is a web application designed for user authentication, including login and registration features. The front end is built with React, while the backend uses PHP and MySQL. The development environment is containerized using Docker to ensure consistency and ease of deployment.",
+  "type": "project",
+  "require": {
+    "php": "^8.2",
+    "vlucas/phpdotenv": "^5.5",
+    "guzzlehttp/guzzle": "^7.5",
+    "monolog/monolog": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "chmod -R 775 storage bootstrap/cache"
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist"
+  },
+  "minimum-stability": "stable"
+}

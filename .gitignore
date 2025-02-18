@@ -4,6 +4,9 @@ db_data/*
 .env
 frontend/.env
 backend/.env
+
+backend/vendor/*
+
 frontend/node_modules
 frontend/npm-debug.log
 frontend/build
