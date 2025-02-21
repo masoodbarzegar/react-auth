@@ -1,4 +1,26 @@
 /* App.css */
 body {
-  font-family: Arial, sans-serif;
+	font-family: Arial, 
+	sans-serif;
 }
+	.row{
+		padding-top: 20px;
+	}
+	#navbar-text{
+		padding: 0px 20px;
+		display: flex;
+		justify-content: space-between;
+	}
+		.navbar-user-data{
+			display: flex;
+			vertical-align: middle;
+		}
+		.separator{
+			margin: 0px 15px;
+		}
+	.main-box{
+		width: 560px;
+		margin: 150px auto;
+		border: 1px solid #efefef;
+		padding: 20px;
+	}

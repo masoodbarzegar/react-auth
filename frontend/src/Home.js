@@ -1,6 +1,6 @@
 const Home=()=>{
 	return(
-		<div>
+		<div className="main-box">
 			Wellcome to Home Page
 		</div>
 
