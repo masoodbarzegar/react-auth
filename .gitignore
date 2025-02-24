@@ -4,6 +4,8 @@ db_data/*
 .env
 frontend/.env
 backend/.env
+backend/.env.production
+backend/.env.docker
 
 backend/vendor/*
 

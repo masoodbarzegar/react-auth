@@ -5,14 +5,14 @@ header("Access-Control-Allow-Methods: POST");
 header("Content-type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Load environment variables
-require_once __DIR__ . '/vendor/autoload.php';
-Dotenv\Dotenv::createImmutable(__DIR__ . '/')->load();
+require __DIR__ . '/bootstrap.php';
 
-$servername = getenv('DB_HOST');
-$username = getenv('DB_USER');
-$password = getenv('DB_PASS');
-$database = getenv('DB_NAME');
+$dbConfig = $config['db'];
+
+$servername = $dbConfig['host'];
+$username = $dbConfig['user'];
+$password = $dbConfig['pass'];
+$database = $dbConfig['name'];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
