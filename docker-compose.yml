@@ -29,7 +29,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./backend/.env
+      - ./backend/.env.docker
 
   db:
     image: mysql:8.0
@@ -41,7 +41,7 @@ services:
     networks:
       - mynetwork
     env_file:
-      - ./backend/.env
+      - ./backend/.env.docker
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -51,7 +51,7 @@ services:
     networks:
       - mynetwork
     env_file:
-      - ./backend/.env
+      - ./backend/.env.docker
 
 networks:
   mynetwork:
