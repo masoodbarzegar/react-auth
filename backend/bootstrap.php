@@ -1,6 +1,7 @@
 <?php 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\Config;
 use Dotenv\Dotenv;
 
 $envFile = '.env'; // Default
@@ -15,21 +16,20 @@ if (isset($_SERVER['APP_ENV'])) {
 $dotenv = Dotenv::createImmutable(__DIR__, $envFile);
 $dotenv->load();
 
-// Load the config
-$config = require __DIR__ . '/config/config.php';
+// Load configuration
+Config::load();
 
 // Set timezone
-$timezone = $config['app']['timezone']; // Use the value from app.php
-date_default_timezone_set($timezone);
+date_default_timezone_set(Config::get('app.timezone'));
 
 // Start session
 session_start();
 
 // Set error reporting based on environment
-if ($config['app']['env'] === 'local') {
+if (Config::get('app.env') === 'local') {
 	error_reporting(E_ALL);
-	ini_set('display_errors', $config['app']['debug'] ? '1' : '0');
+	ini_set('display_errors', Config::get('app.debug') ? '1' : '0');
 } else {
 	error_reporting(0);
-	ini_set('display_errors', $config['app']['debug'] ? '1' : '0');
+	ini_set('display_errors', Config::get('app.debug') ? '1' : '0');
 }

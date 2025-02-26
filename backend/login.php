@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require __DIR__ . '/bootstrap.php';
 
-$dbConfig = $config['db'];
+$dbConfig = \App\Config::get('database');
 
 $servername = $dbConfig['host'];
 $username = $dbConfig['user'];
