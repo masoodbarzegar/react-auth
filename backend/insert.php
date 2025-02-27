@@ -7,20 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require __DIR__ . '/bootstrap.php';
 
-$dbConfig = \App\Config::get('database');
-
-$servername = $dbConfig['host'];
-$username = $dbConfig['user'];
-$password = $dbConfig['pass'];
-$database = $dbConfig['name'];
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-	die("Connection failed: " . $conn->connect_error);
-}
+use App\Models\UserModel;
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -34,40 +21,29 @@ $last_name = $data->last_name;
 $email = $data->email;
 $password = $data->password;
 
-$check_sql = $conn->prepare("SELECT id FROM users WHERE email = ?");
-$check_sql->bind_param("s", $email);
-$check_sql->execute();
-$check_result = $check_sql->get_result();
+$userModel = new UserModel();
 
-if ($check_result->num_rows > 0) {
+// Check if email already exists
+if ($userModel->getUserByEmail($email)) {
 	echo json_encode(['status' => 'invalid', 'error' => 'Email already registered']);
 	exit;
 }
 
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+// Register new user
+$userId = $userModel->registerUser($first_name, $last_name, $email, $password);
 
-$sql = $conn->prepare("INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)");
-$sql->bind_param("ssss", $first_name, $last_name, $email, $hashed_password);
-
-if ($sql->execute()) {
+if ($userId) {
 	echo json_encode([
 		'status' => 'valid',
 		'message' => 'User registered successfully',
 		'data' => [
-			'id' => $sql->insert_id,
+			'id' => $userId,
 			'first_name' => $first_name,
 			'last_name' => $last_name,
 			'email' => $email
 		]
 	]);
 } else {
-	echo json_encode([
-		'status' => 'invalid',
-		'error' => 'Query execution failed: ' . $sql->error
-	]);
+	echo json_encode(['status' => 'invalid', 'error' => 'User registration failed']);
 }
-
-// Close connection
-$conn->close();
-
 ?>

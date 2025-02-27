@@ -7,23 +7,10 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require __DIR__ . '/bootstrap.php';
 
-$dbConfig = \App\Config::get('database');
-
-$servername = $dbConfig['host'];
-$username = $dbConfig['user'];
-$password = $dbConfig['pass'];
-$database = $dbConfig['name'];
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-	die("Connection failed: " . $conn->connect_error);
-}
+use App\Models\UserModel;
 
 $data = json_decode(file_get_contents("php://input"));
-	
+
 if (!isset($data->email, $data->password)) {
 	echo json_encode([
 		'status' => 'error',
@@ -35,46 +22,37 @@ if (!isset($data->email, $data->password)) {
 $email = $data->email;
 $password = $data->password;
 
-
-$sql = $conn->prepare("SELECT * FROM users WHERE email = ?");
-$sql->bind_param("s", $email);
-
-if ($sql->execute()) {
-	$result = $sql->get_result();
-
-
-	if ($result->num_rows > 0) {
-		http_response_code(200);
-		$user = $result->fetch_assoc();
-
-		if (password_verify($password, $user['password'])) {
-			echo json_encode([
-				'status' => 'valid',
-				'data' => [
-					'email' => $user['email'],
-					'first_name' => $user['first_name'],
-					'last_name' => $user['last_name']
-				]
-			]);
-		} else {
-			echo json_encode([
-				'status' => 'invalid',
-				'message' => 'Incorrect password'
-			]);
-		}
-	} else {
+try {
+	// Instantiate the UserModel
+	$userModel = new UserModel();
+	$user = $userModel->getUserByEmail($email);
+	if (!$user) {
 		echo json_encode([
 			'status' => 'invalid',
 			'message' => 'User not found'
 		]);
+		exit;
+	}
+	if (password_verify($password, $user['password'])) {
+		echo json_encode([
+			'status' => 'valid',
+			'data' => [
+				'email' => $user['email'],
+				'first_name' => $user['first_name'],
+				'last_name' => $user['last_name']
+			]
+		]);
+	} else {
+		echo json_encode([
+			'status' => 'invalid',
+			'message' => 'Incorrect password'
+		]);
 	}
 
-} else {
+} catch (Exception $e) {
 	echo json_encode([
 		'status' => 'error',
-		'message' => 'Query execution failed: ' . $sql->error
+		'message' => 'An error occurred: ' . $e->getMessage()
 	]);
 }
-
-// Close connection
-$conn->close();
+?>
