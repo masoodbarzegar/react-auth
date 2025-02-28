@@ -32,7 +32,7 @@ const Register = ({ auth, setAuth }) => {
 			password: data.password
 		}
 
-		axios.post(process.env.REACT_APP_API_URL + '/insert.php', formData)
+		axios.post(process.env.REACT_APP_API_URL + '/register', formData)
 			.then((result)=>{
 				if(result.data.status === 'valid'){
 					const userData = result.data.data;

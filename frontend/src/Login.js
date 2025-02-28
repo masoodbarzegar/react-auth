@@ -29,7 +29,7 @@ const Login = ({ auth, setAuth }) => {
 			password: user.password
 		}
 
-		axios.post(process.env.REACT_APP_API_URL + '/login.php', formData)
+		axios.post(process.env.REACT_APP_API_URL + '/login', formData)
 			.then((result)=>{
 				if(result.data.status === 'valid'){
 					const userData = result.data.data;
