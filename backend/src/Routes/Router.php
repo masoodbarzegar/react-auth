@@ -1,34 +1,35 @@
 <?php
 namespace App\Routes;
 
+use App\Controllers\AuthController;
+
 class Router {
+	private $routes = [];
+
+	public function __construct() {
+		$this->registerRoutes();
+	}
+
+	private function registerRoutes() {
+		$this->routes = [
+			'POST' => [
+				'/login' => [AuthController::class, 'login'],
+				'/register' => [AuthController::class, 'register']
+			]
+		];
+	}
 
 	public function handleRequest(){
-		// Get the requested URL path
-		$path = $_SERVER['REQUEST_URI'];
+		$method = $_SERVER['REQUEST_METHOD'];
+		$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-		// Basic Routing Logic
-		switch ($path) {
-			case '/login':
-				$this->handleLogin();
-				break;
-			case '/register':
-				$this->handleRegister();
-				break;
-			default:
-				$this->handle404();
-				break;
+		if (isset($this->routes[$method][$path])) {
+			[$controller, $method] = $this->routes[$method][$path];
+			$controllerInstance = new $controller();
+			$controllerInstance->$method();
+		} else {
+			$this->handle404();
 		}
-	}
-
-	private function handleLogin() {
-		// Include the existing login.php file from backend
-		require_once __DIR__ . '/../../login.php';
-	}
-
-	private function handleRegister() {
-		// Include the existing register.php file from backend
-		require_once __DIR__ . '/../../insert.php';
 	}
 
 	private function handle404() {
