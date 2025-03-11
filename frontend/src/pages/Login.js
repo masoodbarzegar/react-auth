@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginSuccess } from '../store/authSlice';
 
 
 const Login = () => {
-	let navigate = useNavigate();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { isAuthenticated } = useSelector((state) => state.auth);
 
 	useEffect(() => {
-		const user = localStorage.getItem('userName');
-		if (user) {
-			navigate('/dashboard'); // Redirect if already authenticated
+		if (isAuthenticated) {
+			navigate('/dashboard');
 		}
-	}, [navigate]);
+	}, [isAuthenticated, navigate]);
 
 	const [user, setData] = useState({
 		email:"",
@@ -35,8 +38,8 @@ const Login = () => {
 				if(result.data.status === 'valid'){
 					const userData = result.data.data;
 					const displayName = `${userData.first_name} ${userData.last_name}`;
-					localStorage.setItem('email', userData.email);
-					localStorage.setItem('userName', displayName);
+
+					dispatch(loginSuccess({ name: displayName, email: userData.email }));
 
 					navigate('/dashboard');
 

@@ -1,17 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../store/authSlice';
 
 
 const Navbar = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	let navigate = useNavigate();
+	const { user, isAuthenticated } = useSelector((state) => state.auth);
 
 	const handleLogout = () => {
-		localStorage.clear();
+		dispatch(logout ());
 		navigate('/login');
-	}
-
-	const auth = localStorage.getItem('userName');
-
+	};
 
 	return(
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,7 +24,7 @@ const Navbar = () => {
 					<li className="nav-item">
 					<Link to="/" className="nav-link active">Home</Link>
 					</li>
-					{!auth && (
+					{!isAuthenticated  && (
 						<>
 							<li className="nav-item">
 								<Link to="/register" className="nav-link active">Register</Link>
@@ -34,13 +35,13 @@ const Navbar = () => {
 						</>
 					)}
 				</ul>
-				{auth ? (
+				{isAuthenticated && (
 					<span className="navbar-user-data">
-						Welcome: <Link to="/dashboard" className="nav-link active">{auth}</Link> 
-						<span className="separator">|</span> 
+						Welcome: <Link to="/dashboard" className="nav-link active">{user.name}</Link>
+						<span className="separator">|</span>
 						<button onClick={handleLogout}>Logout</button>
 					</span>
-				) : null}
+				)}
 			</div>
 		</nav>
 	);

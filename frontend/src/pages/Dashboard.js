@@ -1,15 +1,18 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+
 
 const Dashboard = () => {
 	let navigate = useNavigate();
+	const { isAuthenticated } = useSelector((state) => state.auth);
 
 	useEffect(() => {
-		const auth = localStorage.getItem('email'); // Check if user is authenticated
-		if (!auth) {
-			navigate('/login'); // Redirect to login if not authenticated
+		if (!isAuthenticated) {
+			navigate('/login'); 
 		}
-	}, [navigate]);
+	}, [isAuthenticated, navigate]);
 
 	return(
 		<div className="main-box">
