@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.7.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^6.14.1"
   },
   "devDependencies": {
