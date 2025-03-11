@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess } from '../store/authSlice';
+import FormContainer from '../components/FormContainer';
+import FormInput from '../components/FormInput';
+import Button from '../components/Button';
 
 
 const Login = () => {
@@ -55,34 +58,35 @@ const Login = () => {
 	}
 
 	return(
-		<div className="main-box">
-		<form onSubmit={submitForm}>
-		<div className="row">
-			<div className="col-md-12 text-center"><h1>Login</h1></div>
-		</div>
-		
-		<div className="row">
-			<div className="col-md-6">Email</div>
-			<div className="col-md-6">
-				<input type="text" name="email" className="form-control" onChange={handleChange} value={user.email} />
+		<FormContainer onSubmit={submitForm}>
+			<div className="row">
+				<div className="col-md-12 text-center">
+				<h1>Login</h1>
+				</div>
 			</div>
-		</div>
+			<FormInput
+				label="Email"
+				type="text"
+				name="email"
+				value={user.email}
+				onChange={handleChange}
+				placeholder="Enter your email"
+			/>
+			<FormInput
+				label="Password"
+				type="password"
+				name="password"
+				value={user.password}
+				onChange={handleChange}
+				placeholder="Enter your password"
+			/>
 
-		<div className="row">
-			<div className="col-md-6">Password</div>
-			<div className="col-md-6">
-				<input type="password" name="password" className="form-control" onChange={handleChange} value={user.password} />
+			<div className="row">
+				<div className="col-md-12 text-center">
+					<Button type="submit">Login</Button>
+				</div>
 			</div>
-		</div>
-
-		<div className="row">
-			<div className="col-md-12 text-center">
-				<input type="submit" name="submit" className="btn btn-success" />
-			</div>
-		</div>
-		</form>
-		</div>
-		
+		</FormContainer>
 	)
 }
 export default Login;

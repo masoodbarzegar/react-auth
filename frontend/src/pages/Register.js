@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginSuccess } from '../store/authSlice';
+import { useSelector } from 'react-redux';
+import FormContainer from '../components/FormContainer';
+import FormInput from '../components/FormInput';
+import Button from '../components/Button';
 
 const Register = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { isAuthenticated } = useSelector((state) => state.auth);
 	
@@ -39,12 +40,7 @@ const Register = () => {
 		axios.post(process.env.REACT_APP_API_URL + '/register', formData)
 			.then((result)=>{
 				if(result.data.status === 'valid'){
-					const userData = result.data.data;
-					const displayName = `${userData.first_name} ${userData.last_name}`;
-
-					dispatch(loginSuccess({ name: displayName, email: userData.email }));
-
-					navigate('/dashboard');
+					navigate('/login');
 				} else {
 					alert(result.data.message);
 				}
@@ -57,48 +53,54 @@ const Register = () => {
 	};
 
 	return(
-		<div className="main-box">
-		<form onSubmit={submitForm}>
-		<div className="row">
-			<div className="col-md-12 text-center"><h1>Register</h1></div>
-		</div>
-		
-		<div className="row">
-			<div className="col-md-6">First Name</div>
-			<div className="col-md-6">
-				<input type="text" name="first_name" className="form-control" onChange={handleChange} value={data.first_name} />
+		<FormContainer onSubmit={submitForm}>
+			<div className="row">
+				<div className="col-md-12 text-center">
+					<h1>Register</h1>
+				</div>
 			</div>
-		</div>
+			<FormInput
+				label="First Name"
+				type="text"
+				name="first_name"
+				value={data.first_name}
+				onChange={handleChange}
+				placeholder="Enter your first name"
+			/>
 
-		<div className="row">
-			<div className="col-md-6">Last Name</div>
-			<div className="col-md-6">
-				<input type="text" name="last_name" className="form-control" onChange={handleChange} value={data.last_name} />
-			</div>
-		</div>
+			<FormInput
+				label="Last Name"
+				type="text"
+				name="last_name"
+				value={data.last_name}
+				onChange={handleChange}
+				placeholder="Enter your last name"
+			/>
 
-		<div className="row">
-			<div className="col-md-6">Email</div>
-			<div className="col-md-6">
-				<input type="text" name="email" className="form-control" onChange={handleChange} value={data.email} />
-			</div>
-		</div>
+			<FormInput
+				label="Email"
+				type="text"
+				name="email"
+				value={data.email}
+				onChange={handleChange}
+				placeholder="Enter your email"
+			/>
 
-		<div className="row">
-			<div className="col-md-6">Password</div>
-			<div className="col-md-6">
-				<input type="password" name="password" className="form-control" onChange={handleChange} value={data.password} />
-			</div>
-		</div>
+			<FormInput
+				label="Password"
+				type="password"
+				name="password"
+				value={data.password}
+				onChange={handleChange}
+				placeholder="Enter your password"
+			/>
 
-		<div className="row">
-			<div className="col-md-12 text-center">
-				<input type="submit" name="submit" className="btn btn-success" />
+			<div className="row">
+				<div className="col-md-12 text-center">
+					<Button type="submit">Register</Button>
+				</div>
 			</div>
-		</div>
-		</form>
-		</div>
-		
+		</FormContainer>
 	)
 }
 export default Register;
