@@ -1,15 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 
-const Header = ({auth, setAuth}) => {
+const Navbar = () => {
 
 	let navigate = useNavigate();
 
 	const handleLogout = () => {
 		localStorage.clear();
-		setAuth(null); 
 		navigate('/login');
 	}
+
+	const auth = localStorage.getItem('userName');
+
 
 	return(
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -44,4 +46,4 @@ const Header = ({auth, setAuth}) => {
 	);
 };
 
-export default Header;
+export default Navbar;

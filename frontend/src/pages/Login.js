@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
-const Login = ({ auth, setAuth }) => {
+const Login = () => {
 	let navigate = useNavigate();
 
 	useEffect(() => {
-		if (auth) {
-			navigate('/dashboard'); 
+		const user = localStorage.getItem('userName');
+		if (user) {
+			navigate('/dashboard'); // Redirect if already authenticated
 		}
-	}, [auth, navigate]);
+	}, [navigate]);
 
 	const [user, setData] = useState({
 		email:"",
@@ -36,7 +37,7 @@ const Login = ({ auth, setAuth }) => {
 					const displayName = `${userData.first_name} ${userData.last_name}`;
 					localStorage.setItem('email', userData.email);
 					localStorage.setItem('userName', displayName);
-					setAuth(displayName);
+
 					navigate('/dashboard');
 
 				} else {

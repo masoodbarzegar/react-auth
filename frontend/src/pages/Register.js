@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Register = ({ auth, setAuth }) => {
+const Register = () => {
 	let navigate = useNavigate();
 	
 	useEffect(() => {
-		if (auth) {
-			navigate('/dashboard');
+		const user = localStorage.getItem('userName');
+		if (user) {
+			navigate('/dashboard'); // Redirect if already authenticated
 		}
-	}, [auth, navigate]);
+	}, [navigate]);
 
 	const [data, setData] = useState({
 		first_name:"",
@@ -40,7 +41,6 @@ const Register = ({ auth, setAuth }) => {
 
 					localStorage.setItem('email', userData.email);
 					localStorage.setItem('userName', displayName);
-					setAuth(displayName);
 
 					navigate('/dashboard');
 				} else {
