@@ -59,7 +59,7 @@ class AuthController{
 		}
 
 		// Register new user
-		$userId = $userModel->registerUser($data->first_name, $data->last_name, $data->email, password_hash($data->password, PASSWORD_DEFAULT));
+		$userId = $userModel->registerUser($data->first_name, $data->last_name, $data->email, $data->password);
 
 		if ($userId) {
 			echo json_encode(['status' => 'valid', 'message' => 'User registered successfully']);
