@@ -2,6 +2,7 @@
 namespace App\Routes;
 
 use App\Controllers\AuthController;
+use App\Controllers\DashboardController;
 use App\Middleware\MiddlewarePipeline;
 use App\Middleware\JwtMiddleware;
 
@@ -26,6 +27,10 @@ class Router {
 				],
 			],
 			'GET' => [
+				'/dashboard' => [
+					'controller' => [DashboardController::class, 'index'],
+					'middleware' => ['JwtMiddleware'],
+				],
 				'/verify-auth' => [
 					'controller' => [AuthController::class, 'verifyAuth'],
 					'middleware' => ['JwtMiddleware'],
