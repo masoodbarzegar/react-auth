@@ -2,9 +2,16 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use Firebase\JWT\JWT;
+use App\Config;
 use Exception;
 
 class AuthController{
+	private $secretKey;
+
+	public function __construct() {
+		$this->secretKey = Config::get('app.jwt_secret_key');
+	}
 
 	public function login(){
 		$data = json_decode(file_get_contents("php://input"));
@@ -21,23 +28,36 @@ class AuthController{
 			$userModel = new UserModel();
 			$user = $userModel->getUserByEmail($email);
 
-			if (!$user) {
-				echo json_encode(['status' => 'invalid', 'message' => 'User not found']);
+			if (!$user || !password_verify($password, $user['password'])) {
+				echo json_encode(['status' => 'invalid', 'message' => 'Invalid credentials']);
 				exit;
 			}
 
-			if (password_verify($password, $user['password'])) {
-				echo json_encode([
-					'status' => 'valid',
-					'data' => [
-						'email' => $user['email'],
-						'first_name' => $user['first_name'],
-						'last_name' => $user['last_name']
-					]
-				]);
-			} else {
-				echo json_encode(['status' => 'invalid', 'message' => 'Incorrect password']);
-			}
+			// Generate JWT token
+			$token = $this->generateToken([
+				'email' => $user['email'],
+				'first_name' => $user['first_name'],
+				'last_name' => $user['last_name'],
+			]);
+
+			// Set JWT in an HTTP-only cookie
+			setcookie('jwt', $jwt, [
+				'expires' => time() + 3600,
+				'path' => '/',
+				'domain' => Config::get('app.frontend_origin'),
+				//'secure' => true, // Only send over HTTPS
+				'httponly' => true, // Prevent JavaScript access
+				'samesite' => 'Strict', // Prevent CSRF attacks
+			]);
+
+			echo json_encode([
+				'status' => 'valid',
+				'data' => [
+					'email' => $user['email'],
+					'first_name' => $user['first_name'],
+					'last_name' => $user['last_name']
+				]
+			]);
 
 		} catch (Exception $e) {
 			echo json_encode(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()]);
@@ -66,5 +86,29 @@ class AuthController{
 		} else {
 			echo json_encode(['status' => 'invalid', 'error' => 'User registration failed']);
 		}
+	}
+
+	public function verifyAuth() {
+		$user = $GLOBALS['request']['user']; // User data set by JwtMiddleware
+
+		echo json_encode([
+			'status' => 'valid',
+			'user' => [
+				'email' => $user->email,
+				'first_name' => $user->first_name,
+				'last_name' => $user->last_name
+			]
+		]);
+	}
+
+	private function generateToken($userData) {
+		$payload = [
+			'iss' => Config::get('app.base_url'),
+			'aud' => Config::get('app.frontend_origin'),
+			'iat' => time(),
+			'exp' => time() + 3600, // 1 hour expiration
+			'data' => $userData,
+		];
+		return JWT::encode($payload, $this->secretKey, 'HS256');
 	}
 }
