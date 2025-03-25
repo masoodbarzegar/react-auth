@@ -5,6 +5,9 @@ class MiddlewarePipeline {
 	private $middlewares = [];
 
 	public function add($middleware) {
+		if (is_string($middleware) && class_exists("App\\Middleware\\$middleware")) {
+			$middleware = new ("App\\Middleware\\$middleware")();
+		}
 		$this->middlewares[] = $middleware;
 	}
 
