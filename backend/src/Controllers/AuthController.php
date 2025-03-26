@@ -41,7 +41,7 @@ class AuthController{
 			]);
 
 			// Set JWT in an HTTP-only cookie
-			setcookie('jwt', $jwt, [
+			setcookie('jwt', $token, [
 				'expires' => time() + 3600,
 				'path' => '/',
 				'domain' => Config::get('app.frontend_origin'),
