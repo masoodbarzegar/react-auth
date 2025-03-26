@@ -44,8 +44,8 @@ class AuthController{
 			setcookie('jwt', $token, [
 				'expires' => time() + 3600,
 				'path' => '/',
-				'domain' => Config::get('app.frontend_origin'),
-				//'secure' => true, // Only send over HTTPS
+				'domain' => Config::get('app.cookie_domain'),
+				'secure' => Config::get('app.cookie_secure'), // Only send over HTTPS
 				'httponly' => true, // Prevent JavaScript access
 				'samesite' => 'Strict', // Prevent CSRF attacks
 			]);
