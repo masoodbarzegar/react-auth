@@ -89,7 +89,7 @@ class AuthController{
 	}
 
 	public function verifyAuth() {
-		$user = $GLOBALS['request']['user']; // User data set by JwtMiddleware
+		$user = \App\Middleware\MiddlewarePipeline::get('user');
 
 		echo json_encode([
 			'status' => 'valid',
