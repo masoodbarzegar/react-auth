@@ -1,6 +1,7 @@
 <?php
 namespace App\Middleware;
 
+use App\Config;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Exception;
@@ -9,8 +10,7 @@ class JwtMiddleware implements MiddlewareInterface {
 	private $secretKey;
 
 	public function __construct() {
-		Config::load();
-		$this->secretKey = \App\Config::get('app.jwt_secret');
+		$this->secretKey = Config::get('app.jwt_secret_key');
 	}
 
 	public function handle($request, $next) {
