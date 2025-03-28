@@ -18,34 +18,57 @@ const Navbar = () => {
 
 	return(
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
-			<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-				<span className="navbar-toggler-icon"></span>
-			</button>
-			<div className="collapse navbar-collapse" id="navbar-text">
-				<ul className="navbar-nav mr-auto">
-					<li className="nav-item">
-					<Link to="/" className="nav-link active">Home</Link>
-					</li>
-					{!isAuthenticated  && (
-						<>
-							<li className="nav-item">
-								<Link to="/register" className="nav-link active">Register</Link>
-							</li>
-							<li className="nav-item">
-								<Link to="/login" className="nav-link active">Login</Link>
-							</li>
-						</>
-					)}
-				</ul>
+			<div className="container-fluid">
+				<button 
+					className="navbar-toggler" 
+					type="button" 
+					data-bs-toggle="collapse" 
+					data-bs-target="#navbarNav"
+					aria-controls="navbarNav" 
+					aria-expanded="false" 
+					aria-label="Toggle navigation"
+				>
+					<span className="navbar-toggler-icon"></span>
+				</button>
 				{isAuthenticated && (
-					<span className="navbar-user-data">
-						Welcome: <Link to="/dashboard" className="nav-link active">{user.name}</Link>
-						<span className="separator">|</span>
-						<button onClick={handleLogout}>Logout</button>
-					</span>
+					<div className="d-lg-none text-left mt-2">
+						<span className="navbar-text me-3">
+							Welcome: <Link to="/dashboard" className="fw-bold">{user.name}</Link>
+						</span>
+						<button onClick={handleLogout} className="btn btn-outline-danger btn-sm">
+							Logout
+						</button>
+					</div>
 				)}
-			</div>
-		</nav>
+				<div className="collapse navbar-collapse" id="navbarNav">
+					<ul className="navbar-nav me-auto">
+						<li className="nav-item">
+							<Link to="/" className="nav-link active">Home</Link>
+						</li>
+						{!isAuthenticated  && (
+							<>
+								<li className="nav-item">
+									<Link to="/register" className="nav-link active">Register</Link>
+								</li>
+								<li className="nav-item">
+									<Link to="/login" className="nav-link active">Login</Link>
+								</li>
+							</>
+						)}
+					</ul>
+					{isAuthenticated && (
+						<div className="d-none d-lg-block text-left mt-2">
+							<span className="navbar-text me-3">
+								Welcome: <Link to="/dashboard" className="fw-bold">{user.name}</Link>
+							</span>
+							<button onClick={handleLogout} className="btn btn-outline-danger btn-sm">
+								Logout
+							</button>
+						</div>
+					)}
+				</div>
+ 			</div>
+	</nav>
 	);
 };
 
