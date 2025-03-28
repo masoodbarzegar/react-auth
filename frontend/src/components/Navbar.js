@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess } from '../store/authSlice';
+import { logout } from '../services/auth';
 
 
 const Navbar = () => {
@@ -10,8 +11,9 @@ const Navbar = () => {
 	const { user, isAuthenticated } = useSelector((state) => state.auth);
 
 	const handleLogout = () => {
-		dispatch(logoutSuccess());
-		navigate('/login');
+		logout(dispatch).then(() => {
+			navigate('/login');
+		});
 	};
 
 	return(

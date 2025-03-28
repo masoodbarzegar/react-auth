@@ -16,3 +16,14 @@ export const verifyAuth = async (dispatch) => {
 	}
 	return false;
 };
+
+export const logout = async (dispatch) => {
+	try {
+		await apiClient.post('/logout');
+		dispatch(logoutSuccess());
+		return true;
+	} catch (error) {
+		console.error('Logout failed:', error);
+		return false;
+	}
+};

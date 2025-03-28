@@ -25,6 +25,10 @@ class Router {
 					'controller' => [AuthController::class, 'register'],
 					'middleware' => [], // No middleware for register
 				],
+				'/logout' => [
+					'controller' => [AuthController::class, 'logout'],
+					'middleware' => ['JwtMiddleware'],
+				],
 			],
 			'GET' => [
 				'/dashboard' => [

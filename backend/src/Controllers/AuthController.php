@@ -88,6 +88,20 @@ class AuthController{
 		}
 	}
 
+	public function logout() {
+		// Clear the JWT cookie by setting it to expire in the past
+		setcookie('jwt', '', [
+			'expires' => time() - 3600,
+			'path' => '/',
+			'domain' => Config::get('app.cookie_domain'),
+			'secure' => Config::get('app.cookie_secure'),
+			'httponly' => true,
+			'samesite' => 'Strict',
+		]);
+
+		echo json_encode(['status' => 'success', 'message' => 'Logged out successfully']);
+	}
+
 	public function verifyAuth() {
 		$user = \App\Middleware\MiddlewarePipeline::get('user');
 
