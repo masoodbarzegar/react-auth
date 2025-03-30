@@ -24,12 +24,6 @@ const Register = () => {
 
 	const navigate = useNavigate();
 	const { isAuthenticated } = useSelector((state) => state.auth);
-	
-	useEffect(() => {
-		if (isAuthenticated) {
-			navigate('/dashboard');
-		}
-	}, [isAuthenticated, navigate]);
 
 	const validateField = (name, value) => {
 		switch (name) {
