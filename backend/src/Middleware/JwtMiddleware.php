@@ -1,6 +1,8 @@
 <?php
 namespace App\Middleware;
 
+use App\Middleware\MiddlewarePipeline;
+use App\Config;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Exception;
@@ -9,8 +11,7 @@ class JwtMiddleware implements MiddlewareInterface {
 	private $secretKey;
 
 	public function __construct() {
-		Config::load();
-		$this->secretKey = \App\Config::get('app.jwt_secret');
+		$this->secretKey = Config::get('app.jwt_secret_key');
 	}
 
 	public function handle($request, $next) {
@@ -24,7 +25,8 @@ class JwtMiddleware implements MiddlewareInterface {
 
 		try {
 			$decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
-			$request->user = $decoded;
+
+			MiddlewarePipeline::set('user', $decoded->data);
 			return $next($request);
 		} catch (Exception $e) {
 			http_response_code(401);
